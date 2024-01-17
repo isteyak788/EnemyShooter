@@ -1,0 +1,38 @@
+using UnityEngine;
+
+public class EnemyShooter : MonoBehaviour
+{
+    public GameObject projectilePrefab;
+    public Transform firePoint;
+    public float fireRate = 2f;
+    public float projectileSpeed = 10f;
+    private float nextFireTime;
+
+    void Update()
+    {
+        if (Time.time >= nextFireTime)
+        {
+            // Call the Shoot method
+            Shoot();
+
+            // Set the next fire time based on the fire rate
+            nextFireTime = Time.time + 1f / fireRate;
+        }
+    }
+
+    void Shoot()
+    {
+        if (projectilePrefab != null && firePoint != null)
+        {
+            // Instantiate the projectile at the fire point position and rotation
+            GameObject projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
+
+            // Set the projectile speed
+            Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();
+            if (projectileRb != null)
+            {
+                projectileRb.AddForce(firePoint.forward * projectileSpeed, ForceMode.Impulse);
+            }
+        }
+    }
+}
